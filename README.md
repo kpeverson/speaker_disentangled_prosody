@@ -21,3 +21,7 @@ pip install -e ./
 ```bash
 pip install -r requirements.txt
 ```
+
+## Data preparation
+
+### Download the [GigaSpeech dataset](https://github.com/SpeechColab/GigaSpeech)
