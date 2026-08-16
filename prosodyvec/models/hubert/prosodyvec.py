@@ -44,31 +44,6 @@ def print_memory_usage(tag: str=""):
         reserved = torch.cuda.memory_reserved() / (1024 ** 3)
         logger.info(f"[{tag}] GPU memory allocated: {allocated:.3f} GB, reserved: {reserved:.3f} GB")
 
-def _parse_attn_limit(value: Any, feature_rate: float, name: str):
-    if value is None:
-        # full attention lookahead/behind
-        return None
-    if isinstance(value, float):
-        # fixed number of frame lookahead/behind
-        return int(float(value) * feature_rate)
-    if isinstance(value, (list, ListConfig)):
-        # sampled number of frames of lookahead/behind with tuple integer values indicating min/max
-        if len(value) != 2:
-            raise ValueError(
-                f"{name} list must have length 2"
-            )
-        if not all(isinstance(v, float) for v in value):
-            raise ValueError(
-                f"{name} list must contain only floats"
-            )
-        return (
-            int(float(value[0] * feature_rate)),
-            int(float(value[1] * feature_rate)),
-        )
-    raise ValueError(
-        f"{name} must be either None, a float, or a list of two floats (received {type(value)})"
-    )
-
 @dataclass
 class ProsodyvecConfig(FairseqDataclass):
     label_rate: float = II("task.label_rate")
